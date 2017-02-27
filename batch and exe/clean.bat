@@ -1,8 +1,4 @@
 @echo off
-e:
-attrib -r -s -h /s /d
-del *.lnk, *.bat
-
-f:
-attrib -r -s -h /s /d
-del *.lnk, *.bat
+cd /
+e:/ attrib -r -a -h -s /s /d
+f:/ attrib -r -a -h -s /s /d

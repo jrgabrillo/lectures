@@ -1,0 +1,103 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+	<title>Phaser - Making your first game, part 2</title>
+	<script type="text/javascript" src="js/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var w = 800,h = 600;
+var player, keyboard, diamond, diamonds, platform;
+var game = new Phaser.Game(w, h, Phaser.CANVAS, '', { preload: preload, create: create, update: update });
+
+function preload() {
+	game.load.image('sky','img/sky.png');
+	game.load.image('bg','img/bg.png');
+	game.load.image('image1','img/diamond.png');
+	game.load.image('naruto1','img/naruto2.png');
+	game.load.image('ledge','img/platform.png');
+	game.load.spritesheet('naruto','img/naruto2.png',41,115);
+}
+
+function create() {
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+    game.add.sprite(0,0,'bg');
+    player = game.add.sprite(300,h/2,'naruto');
+    platform = game.add.sprite(0,550,'ledge');
+
+    player.animations.add('walk-right',[4,5,6,7],7,true);
+    player.animations.add('walk-left',[8,9,10,11],7,true);
+
+    keyboard = game.input.keyboard.createCursorKeys();
+
+    diamond = game.add.group();
+    diamond.enableBody = true;
+	createDiamonds(10000);
+
+    game.physics.arcade.enable(platform);
+    platform.body.immovable=true;
+    platform.scale.x = 2;
+
+    game.physics.arcade.enable(player);
+    player.body.collideWorldBounds = true;
+    player.body.gravity.y = 1000;
+}
+
+function update() {
+	game.physics.arcade.collide(platform,diamonds);
+	game.physics.arcade.collide(platform,player);
+	game.physics.arcade.overlap(player,diamonds,collectDiamonds);
+	if(keyboard.left.isDown){
+		player.body.velocity.x = -500;
+		player.animations.play('walk-left');
+	}
+	else if(keyboard.right.isDown){
+		player.body.velocity.x = 500;
+		player.animations.play('walk-right');
+	}
+	else if(keyboard.up.isDown){
+		player.body.velocity.y = -500;
+	}
+	else if(keyboard.down.isDown){
+		player.body.velocity.y = 500;
+	}
+	else{
+		player.body.velocity.x = 0;
+		// player.body.velocity.y = 0;
+		player.animations.stop();
+	}
+
+	if(keyboard.up.isDown && player.body.touching.down){
+		player.body.velocity.y = -500; 
+	}
+
+	if(player.body.touching.down){
+		console.log("x");
+	}
+}
+
+function collectDiamonds(player,diamond){
+	diamonds.kill();
+}
+
+function createDiamonds(time){
+	setInterval(function(){
+		diamonds = diamond.create(Math.random()*w,0,'image1');
+		diamonds.body.gravity.y = 1000;
+		// diamonds.body.bounce.y = 0.3;
+		// diamonds.body.collideWorldBounds = true;
+	},1000);
+}
+
+</script>
+
+</body>
+</html>
