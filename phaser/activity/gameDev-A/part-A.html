@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 2</title>
     <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/proseso.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -11,101 +12,5 @@
     </style>
 </head>
 <body>
-
-<script type="text/javascript">
-var w = 800, h = 600;
-var game = new Phaser.Game(w, h, Phaser.CANVAS, '', { preload: preload, create: create, update: update });
-
-var player, keyboard;
-var diamond, star, shineDiamond,shineDiamonds;
-function preload() {
-    game.load.image("bg","img/sky.png");
-    game.load.image("bg1","img/bg.png");
-    game.load.image("diamond","img/diamond.png");
-    game.load.spritesheet("bg-images","img/scenes-lava.png",1024,600);
-    game.load.spritesheet("naruto","img/naruto2.png",41,112);
-}
-
-function create() {
-    game.physics.startSystem(Phaser.Physics.ARCADE);
-    game.add.sprite(0,0,"bg");
-    diamond = game.add.sprite(400,300,"diamond");
-    player = game.add.sprite(600,0,"naruto");
-
-    player.animations.add('walk-right',[4,5,6,7],7,true);
-    player.animations.add('walk-left',[8,9,10,11],7,true);
-
-    keyboard = game.input.keyboard.createCursorKeys();
-
-    game.physics.arcade.enable(player);
-    game.physics.arcade.enable(diamond);
-
-    shineDiamond = game.add.group();
-    shineDiamond.enableBody = true;
-
-    // for(x=0;x<10;x++){
-    //     var shineDiamonds = shineDiamond.create(Math.random+x,0,'diamond');
-    //     shineDiamonds.body.gravity.y = 500;
-    //     shineDiamonds.body.collideWorldBounds = true;
-    //     shineDiamonds.body.bounce.y = 0.6;
-    // }
-
-
-    createDiamonds();
-
-
-    // diamond.body.gravity.y = -100;
-    // diamond.body.bounce.y = 0.2;
-    // diamond.body.collideWorldBounds = true;
-
-    player.body.collideWorldBounds = true;
-    player.body.gravity.y = 1000;
-    player.body.bounce.y = 0.2
-
-}
-
-// var x = 0;
-function update() {
-    game.physics.arcade.collide(player,shineDiamond);
-    game.physics.arcade.collide(player,star);
-    // game.physics.arcade.overlap(player,shineDiamond,collectDiamonds);
-
-    if(keyboard.left.isDown){
-        // x++;
-        player.animations.play("walk-left");
-        player.body.velocity.x = -200;
-        // bg.frame = 0;
-    }
-    else if(keyboard.right.isDown){
-        // x--;
-        // bg.frame = 1;
-        player.animations.play("walk-right");
-        player.body.velocity.x = 200;
-    }
-    else if(keyboard.up.isDown){
-        player.body.velocity.y = -200;
-    }
-    else{
-        player.body.velocity.x = 0;
-        player.animations.stop();
-    }
-}
-
-function collectDiamonds(player,shineDiamonds){
-    shineDiamonds.kill();
-}
-
-function createDiamonds(){
-
-    setInterval(function(){
-        var shineDiamonds = shineDiamond.create(Math.random()*w,0,'diamond');
-        shineDiamonds.body.gravity.y = 500;
-        shineDiamonds.body.collideWorldBounds = true;
-        shineDiamonds.body.bounce.y = 0.6;
-    },100)
-
-}
-</script>
-
 </body>
 </html>
